@@ -18,6 +18,9 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/pkg/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"os"
 	"runtime"
 	"time"
@@ -125,4 +128,35 @@ func run(ctx context.Context) {
 	if err != nil {
 		logrus.Fatalf("etcd restore operator stopped with error: %v", err)
 	}
+}
+
+// createServiceForMyself gets restore-operator pod labels, strip away "pod-template-hash",
+// and then use it as selector to create a service for current restore-operator.
+func createServiceForMyself(kubecli kubernetes.Interface, name, namespace string) error {
+	pod, err := kubecli.CoreV1().Pods(namespace).Get(context.TODO(), name, metav1.GetOptions{})
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	// strip away replicaset-specific label added by deployment.
+	delete(pod.Labels, "pod-template-hash")
+	svc := &v1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      serviceNameForMyself,
+			Namespace: namespace,
+			Labels:    pod.Labels,
+		},
+		Spec: v1.ServiceSpec{
+			Ports: []v1.ServicePort{{
+				Port:       int32(servicePortForMyself),
+				TargetPort: intstr.FromInt(servicePortForMyself),
+				Protocol:   v1.ProtocolTCP,
+			}},
+			Selector: pod.Labels,
+		},
+	}
+	_, err = kubecli.CoreV1().Services(namespace).Create(context.TODO(), svc, metav1.CreateOptions{})
+	if err != nil && !k8sutil.IsKubernetesResourceAlreadyExistError(err) {
+		return errors.WithStack(err)
+	}
+	return nil
 }
