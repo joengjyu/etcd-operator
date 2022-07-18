@@ -1,4 +1,4 @@
-image: ghcr.io/joengjyu/etcd-operator-controller:4a2b3f6
+image: ghcr.io/joengjyu/etcd-operator-controller:9998dae5
 rbac:
   useCluster: true
   roleName: etcd-operator-role
