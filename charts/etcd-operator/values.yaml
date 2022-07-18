@@ -1,0 +1,7 @@
+rbac:
+  useCluster: true
+  roleName: etcd-operator-role
+  roleBindingName: etcd-operator-rolebinding
+karmada:
+  enabled: true
+  clusterName: member1
