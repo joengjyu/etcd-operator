@@ -66,7 +66,7 @@ func init() {
 	// chaos level will be removed once we have a formal tool to inject failures.
 	flag.IntVar(&chaosLevel, "chaos-level", -1, "DO NOT USE IN PRODUCTION - level of chaos injected into the etcd clusters created by the operator.")
 	flag.BoolVar(&printVersion, "version", false, "Show version and quit")
-	flag.BoolVar(&createCRD, "create-crd", true, "The operator will not create the EtcdCluster CRD when this flag is set to false.")
+	flag.BoolVar(&createCRD, "create-crds", true, "The operator will not create the EtcdCluster CRD when this flag is set to false.")
 	flag.DurationVar(&gcInterval, "gc-interval", 10*time.Minute, "GC interval")
 	flag.BoolVar(&clusterWide, "cluster-wide", false, "Enable operator to watch clusters in all namespaces")
 	flag.Parse()

@@ -54,7 +54,7 @@ Note that currently the etcd-restore-operator only supports restoring from backu
 3. Verify that the etcd-restore-operator creates the `EtcdRestore` CRD:
 
     ```sh
-    $ kubectl get crd
+    $ kubectl get crds
     NAME                                       KIND
     etcdrestores.etcd.database.coreos.com      CustomResourceDefinition.v1beta1.apiextensions.k8s.io
     ```

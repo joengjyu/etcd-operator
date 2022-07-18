@@ -28,7 +28,7 @@ etcd-backup-operator-1102130733-hhgt7   1/1       Running   0          3s
 Verify that the etcd-backup-operator creates EtcdBackup CRD:
 
 ```sh
-$ kubectl get crd
+$ kubectl get crds
 NAME                                    KIND
 etcdbackups.etcd.database.coreos.com    CustomResourceDefinition.v1beta1.apiextensions.k8s.io
 ```

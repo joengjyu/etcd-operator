@@ -22,6 +22,21 @@ image: build
 push: image
 	@docker push $(IMAGE):$(GIT_SHA)
 
+# Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
+ifeq (,$(shell go env GOBIN))
+GOBIN=$(shell go env GOPATH)/bin
+else
+GOBIN=$(shell go env GOBIN)
+endif
+CONTROLLER_GEN = $(GOBIN)/controller-gen
+
+controller-gen:
+	go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.9.2
+
+## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
+manifests:
+	$(CONTROLLER_GEN) rbac:roleName=etcd-operator-role crd paths="./pkg/apis/etcd/v1beta2" output:dir=./charts/etcd-operator/templates/crds
+
 k8s:
 	chmod +x vendor/k8s.io/code-generator/generate-groups.sh
 	vendor/k8s.io/code-generator/generate-groups.sh \

@@ -51,7 +51,7 @@ const (
 )
 
 func init() {
-	flag.BoolVar(&createCRD, "create-crd", true, "The restore operator will not create the EtcdRestore CRD when this flag is set to false.")
+	flag.BoolVar(&createCRD, "create-crds", true, "The restore operator will not create the EtcdRestore CRD when this flag is set to false.")
 	flag.Parse()
 }
 

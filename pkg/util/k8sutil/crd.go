@@ -18,14 +18,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
-
 	api "github.com/coreos/etcd-operator/pkg/apis/etcd/v1beta2"
-	"github.com/coreos/etcd-operator/pkg/util/retryutil"
-
-	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 )
 
@@ -53,59 +47,59 @@ func listClustersURI(ns string) string {
 }
 
 func CreateCRD(clientset apiextensionsclient.Interface, crdName, rkind, rplural, shortName string) error {
-	crd := &apiextensionsv1.CustomResourceDefinition{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: crdName,
-		},
-		Spec: apiextensionsv1.CustomResourceDefinitionSpec{
-			Group: api.SchemeGroupVersion.Group,
-			Versions: []apiextensionsv1.CustomResourceDefinitionVersion{
-				{
-					Name:    api.SchemeGroupVersion.Version,
-					Served:  true,
-					Storage: true,
-				},
-			},
-			Scope: apiextensionsv1.NamespaceScoped,
-			Names: apiextensionsv1.CustomResourceDefinitionNames{
-				Plural: rplural,
-				Kind:   rkind,
-			},
-		},
-	}
-	if len(shortName) != 0 {
-		crd.Spec.Names.ShortNames = []string{shortName}
-	}
-	_, err := clientset.ApiextensionsV1().CustomResourceDefinitions().Create(context.TODO(), crd, metav1.CreateOptions{})
-	if err != nil && !IsKubernetesResourceAlreadyExistError(err) {
-		return err
-	}
+	//crd := &apiextensionsv1.CustomResourceDefinition{
+	//	ObjectMeta: metav1.ObjectMeta{
+	//		Name: crdName,
+	//	},
+	//	Spec: apiextensionsv1.CustomResourceDefinitionSpec{
+	//		Group: api.SchemeGroupVersion.Group,
+	//		Versions: []apiextensionsv1.CustomResourceDefinitionVersion{
+	//			{
+	//				Name:    api.SchemeGroupVersion.Version,
+	//				Served:  true,
+	//				Storage: true,
+	//			},
+	//		},
+	//		Scope: apiextensionsv1.NamespaceScoped,
+	//		Names: apiextensionsv1.CustomResourceDefinitionNames{
+	//			Plural: rplural,
+	//			Kind:   rkind,
+	//		},
+	//	},
+	//}
+	//if len(shortName) != 0 {
+	//	crd.Spec.Names.ShortNames = []string{shortName}
+	//}
+	//_, err := clientset.ApiextensionsV1().CustomResourceDefinitions().Create(context.TODO(), crd, metav1.CreateOptions{})
+	//if err != nil && !IsKubernetesResourceAlreadyExistError(err) {
+	//	return err
+	//}
 	return nil
 }
 
 func WaitCRDReady(clientset apiextensionsclient.Interface, crdName string) error {
-	err := retryutil.Retry(5*time.Second, 20, func() (bool, error) {
-		crd, err := clientset.ApiextensionsV1().CustomResourceDefinitions().Get(context.TODO(), crdName, metav1.GetOptions{})
-		if err != nil {
-			return false, err
-		}
-		for _, cond := range crd.Status.Conditions {
-			switch cond.Type {
-			case apiextensionsv1.Established:
-				if cond.Status == apiextensionsv1.ConditionTrue {
-					return true, nil
-				}
-			case apiextensionsv1.NamesAccepted:
-				if cond.Status == apiextensionsv1.ConditionFalse {
-					return false, fmt.Errorf("Name conflict: %v", cond.Reason)
-				}
-			}
-		}
-		return false, nil
-	})
-	if err != nil {
-		return fmt.Errorf("wait CRD created failed: %v", err)
-	}
+	//err := retryutil.Retry(5*time.Second, 20, func() (bool, error) {
+	//	crd, err := clientset.ApiextensionsV1().CustomResourceDefinitions().Get(context.TODO(), crdName, metav1.GetOptions{})
+	//	if err != nil {
+	//		return false, err
+	//	}
+	//	for _, cond := range crd.Status.Conditions {
+	//		switch cond.Type {
+	//		case apiextensionsv1.Established:
+	//			if cond.Status == apiextensionsv1.ConditionTrue {
+	//				return true, nil
+	//			}
+	//		case apiextensionsv1.NamesAccepted:
+	//			if cond.Status == apiextensionsv1.ConditionFalse {
+	//				return false, fmt.Errorf("Name conflict: %v", cond.Reason)
+	//			}
+	//		}
+	//	}
+	//	return false, nil
+	//})
+	//if err != nil {
+	//	return fmt.Errorf("wait CRD created failed: %v", err)
+	//}
 	return nil
 }
 
