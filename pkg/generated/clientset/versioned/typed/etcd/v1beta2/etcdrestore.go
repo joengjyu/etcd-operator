@@ -19,6 +19,7 @@ limitations under the License.
 package v1beta2
 
 import (
+	"context"
 	v1beta2 "github.com/coreos/etcd-operator/pkg/apis/etcd/v1beta2"
 	scheme "github.com/coreos/etcd-operator/pkg/generated/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -69,7 +70,7 @@ func (c *etcdRestores) Get(name string, options v1.GetOptions) (result *v1beta2.
 		Resource("etcdrestores").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -81,7 +82,7 @@ func (c *etcdRestores) List(opts v1.ListOptions) (result *v1beta2.EtcdRestoreLis
 		Namespace(c.ns).
 		Resource("etcdrestores").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -93,7 +94,7 @@ func (c *etcdRestores) Watch(opts v1.ListOptions) (watch.Interface, error) {
 		Namespace(c.ns).
 		Resource("etcdrestores").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Watch()
+		Watch(context.TODO())
 }
 
 // Create takes the representation of a etcdRestore and creates it.  Returns the server's representation of the etcdRestore, and an error, if there is any.
@@ -103,7 +104,7 @@ func (c *etcdRestores) Create(etcdRestore *v1beta2.EtcdRestore) (result *v1beta2
 		Namespace(c.ns).
 		Resource("etcdrestores").
 		Body(etcdRestore).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -116,7 +117,7 @@ func (c *etcdRestores) Update(etcdRestore *v1beta2.EtcdRestore) (result *v1beta2
 		Resource("etcdrestores").
 		Name(etcdRestore.Name).
 		Body(etcdRestore).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -132,7 +133,7 @@ func (c *etcdRestores) UpdateStatus(etcdRestore *v1beta2.EtcdRestore) (result *v
 		Name(etcdRestore.Name).
 		SubResource("status").
 		Body(etcdRestore).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -144,7 +145,7 @@ func (c *etcdRestores) Delete(name string, options *v1.DeleteOptions) error {
 		Resource("etcdrestores").
 		Name(name).
 		Body(options).
-		Do().
+		Do(context.TODO()).
 		Error()
 }
 
@@ -155,7 +156,7 @@ func (c *etcdRestores) DeleteCollection(options *v1.DeleteOptions, listOptions v
 		Resource("etcdrestores").
 		VersionedParams(&listOptions, scheme.ParameterCodec).
 		Body(options).
-		Do().
+		Do(context.TODO()).
 		Error()
 }
 
@@ -168,7 +169,7 @@ func (c *etcdRestores) Patch(name string, pt types.PatchType, data []byte, subre
 		SubResource(subresources...).
 		Name(name).
 		Body(data).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
