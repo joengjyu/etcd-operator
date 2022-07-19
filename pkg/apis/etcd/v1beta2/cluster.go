@@ -45,12 +45,13 @@ type EtcdClusterList struct {
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +kubebuilder:subresource:status
 
 type EtcdCluster struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	Spec              ClusterSpec   `json:"spec"`
-	Status            ClusterStatus `json:"status"`
+	Status            ClusterStatus `json:"status,omitempty"`
 }
 
 func (c *EtcdCluster) AsOwner() metav1.OwnerReference {

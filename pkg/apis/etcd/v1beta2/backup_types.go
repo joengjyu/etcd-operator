@@ -54,6 +54,7 @@ type EtcdBackupList struct {
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +kubebuilder:subresource:status
 
 // EtcdBackup represents a Kubernetes EtcdBackup Custom Resource.
 type EtcdBackup struct {

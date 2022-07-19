@@ -27,6 +27,7 @@ type EtcdRestoreList struct {
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +kubebuilder:subresource:status
 
 // EtcdRestore represents a Kubernetes EtcdRestore Custom Resource.
 // The EtcdRestore CR name will be used as the name of the new restored cluster.
