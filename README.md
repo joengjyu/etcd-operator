@@ -1,5 +1,43 @@
 # etcd operator
 
+> Updates: 
+> 1. migrate from dep to go mod
+> 2. upgrade k8s client version
+> 3. move build scripts to Makefile
+> 4. stop creating CRD from operator controller
+
+### MY UPDATE TO MAKE IT WORK
+
+Install etcd operator to you kubernetes cluster.
+
+```shell
+helm install etcd-operator charts/etcd-operator
+```
+
+Create `EtcdCluster` CR
+
+```shell
+kubectl apply -f samples/etcd-cluster-cr.yaml
+```
+
+Generating CRD manifests
+
+```shell
+make manifests
+```
+
+Generating lister,informer,clientset .etc
+
+```shell
+make k8s
+```
+
+Building etcd operator image
+
+```shell
+make image
+```
+
 ### Project status: archived
 
 This project is no longer actively developed or maintained. The project exists here for historical reference. If you are interested in the future of the project and taking over stewardship, please contact etcd-dev@googlegroups.com.
